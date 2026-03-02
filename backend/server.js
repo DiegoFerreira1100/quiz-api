@@ -256,3 +256,12 @@ app.listen(PORT, () => {
     console.log(`  - http://localhost:${PORT}/create-quiz`);
     console.log(`  - http://localhost:${PORT}/play-quiz?id=ID_DO_QUIZ`);
 });
+
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+}
+
+module.exports = app;
