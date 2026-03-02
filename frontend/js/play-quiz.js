@@ -47,7 +47,7 @@ async function loadQuiz(quizId) {
         console.log('Carregando quiz...');
         
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/quizzes/${quizId}`, {
+        const response = await fetch(`/api/quizzes/${quizId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -78,7 +78,7 @@ async function loadQuiz(quizId) {
         answers = new Array(quiz.questions.length).fill(null);
         
         // Registrar jogada (não precisa esperar)
-        fetch(`http://localhost:3000/api/quizzes/${quizId}/play`, {
+        fetch(`/api/quizzes/${quizId}/play`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

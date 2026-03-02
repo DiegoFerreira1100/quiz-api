@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadQuiz(quizId) {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/quizzes/${quizId}`, {
+        const response = await fetch(`/api/quizzes/${quizId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -222,8 +222,8 @@ async function saveQuiz() {
         const quizId = urlParams.get('id');
         
         const url = quizId 
-            ? `http://localhost:3000/api/quizzes/${quizId}`
-            : 'http://localhost:3000/api/quizzes';
+            ? `/api/quizzes/${quizId}`
+            : '/api/quizzes';
         
         const method = quizId ? 'PUT' : 'POST';
         

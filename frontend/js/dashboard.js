@@ -60,7 +60,7 @@ function loadUserData() {
 async function loadQuizzes() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/quizzes', {
+        const response = await fetch('/api/quizzes', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -185,7 +185,7 @@ async function deleteQuiz(id) {
     
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/quizzes/${id}`, {
+        const response = await fetch(`/api/quizzes/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
