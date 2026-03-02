@@ -5,3 +5,4 @@ services:
     buildCommand: npm install
     startCommand: node backend/server.js
     plan: free
+    rootDir: backend
