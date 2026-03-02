@@ -12,6 +12,35 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Configurar pasta frontend como estática
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Rota raiz - redireciona para o dashboard ou login
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
+});
+
+// Rota para login
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/login.html'));
+});
+
+// Rota para dashboard
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
+});
+
+// Rota para criar quiz
+app.get('/create-quiz', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/create-quiz.html'));
+});
+
+// Rota para jogar quiz (com parâmetro id)
+app.get('/play-quiz', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/play-quiz.html'));
+});
+
+
 // IMPORTANTE: Servir arquivos estáticos do frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
