@@ -4,7 +4,7 @@ REST API for managing quiz questions.
 
 
 
-## 🚀 Deploy
+## Deploy
 
 **Aplicação online:** [https://quiz-api.onrender.com](https://quiz-api.onrender.com)
 
@@ -23,7 +23,7 @@ REST API for managing quiz questions.
 - Manage their quizzes (edit/delete)
 - Authenticate via JWT
 
-## 📸 Screenshots
+## Screenshots 
 
 ### Login 
 
@@ -36,4 +36,4 @@ REST API for managing quiz questions.
 
 ## Status
 
-🚧 In development
+In development
