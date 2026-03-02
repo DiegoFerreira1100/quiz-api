@@ -1,2 +1,51 @@
-node_modules
+# Node.js dependencies
+node_modules/
+package-lock.json
+
+# Database files (NÃO subir para o GitHub!)
+backend/users.json
+backend/quizzes.json
+backend/data/
+
+# Environment variables
 .env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# Build e arquivos temporários
+dist/
+build/
+*.tmp
+*.temp
+
+# Backups
+*.bak
+*.backup
+
+# Testes
+coverage/
+.nyc_output/
+
+# Arquivos do Git
+*.orig
+*.merge

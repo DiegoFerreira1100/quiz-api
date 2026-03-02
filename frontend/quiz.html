@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Quiz - QuizCreator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+    <div class="create-container">
+        <div class="header">
+            <h1><i class="fas fa-plus-circle"></i> Criar Novo Quiz</h1>
+            <button class="btn-back" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+        </div>
+
+        <!-- Informações Básicas -->
+        <div class="form-section">
+            <h2>Informações Básicas</h2>
+            <div class="form-group">
+                <label for="quizTitle">Título do Quiz</label>
+                <input type="text" id="quizTitle" placeholder="Ex: Fundamentos de JavaScript" required>
+            </div>
+
+            <div class="form-group">
+                <label for="quizDescription">Descrição</label>
+                <textarea id="quizDescription" rows="3" placeholder="Descreva o conteúdo do quiz..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="quizCategory">Categoria</label>
+                <select id="quizCategory" required>
+                    <option value="">Selecione uma categoria</option>
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="Conhecimentos Gerais">Conhecimentos Gerais</option>
+                    <option value="Entretenimento">Entretenimento</option>
+                    <option value="Ciência">Ciência</option>
+                    <option value="História">História</option>
+                    <option value="Geografia">Geografia</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Perguntas -->
+        <div class="form-section">
+            <h2>Perguntas</h2>
+            <div id="questionsContainer" class="questions-container">
+                <!-- Perguntas serão inseridas aqui via JavaScript -->
+            </div>
+
+            <button class="btn-add-question" onclick="addQuestion()">
+                <i class="fas fa-plus"></i> Adicionar Pergunta
+            </button>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="form-actions">
+            <button class="btn-cancel" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button class="btn-save" onclick="saveQuiz()">
+                <i class="fas fa-save"></i> Salvar Quiz
+            </button>
+        </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert" id="alert">
+        <i class="fas" id="alertIcon"></i>
+        <span id="alertMessage"></span>
+    </div>
+
+    <script src="js/quiz.js"></script>
+</body>
+</html>
