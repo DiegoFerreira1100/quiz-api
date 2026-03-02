@@ -25,9 +25,13 @@ REST API for managing quiz questions.
 
 ## 📸 Screenshots
 
-### 1
+### Login 
 
-<images/1.png />
+![login](images/1.png)
+
+### Dashboard
+
+![dashboard](images/2.png)
 
 
 ## Status
