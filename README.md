@@ -26,8 +26,9 @@ REST API for managing quiz questions.
 ## 📸 Screenshots
 
 ### 1
-![Create Quiz](<images/1.png />
-)
+
+<images/1.png />
+
 
 ## Status
 
