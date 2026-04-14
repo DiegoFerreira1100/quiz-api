@@ -3,78 +3,63 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const PORT = 3000;
 
-// Middleware
+// ========== CONFIGURAÇÕES ==========
+const PORT = process.env.PORT || 3000;
+
+// CORS configurado para produção
 app.use(cors({
-    origin: ['http://127.0.0.1:5500', 'http://localhost:5500'],
+    origin: function(origin, callback) {
+        // Permite requisições sem origin (ex: mobile apps) ou em desenvolvimento
+        if (!origin) return callback(null, true);
+        
+        // Lista de origens permitidas
+        const allowedOrigins = [
+            'http://localhost:5500',
+            'http://127.0.0.1:5500',
+            'https://quiz-api.onrender.com/' 
+        ];
+        
+        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS blocked'));
+        }
+    },
     credentials: true
 }));
+
 app.use(express.json());
 
-// Configurar pasta frontend como estática
+// Servir arquivos estáticos do frontend (uma vez só)
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Rota raiz - redireciona para o dashboard ou login
+// ========== ROTAS DO FRONTEND ==========
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
 });
 
-// Rota para login
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/login.html'));
 });
 
-// Rota para dashboard
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
-});
-
-// Rota para criar quiz
-app.get('/create-quiz', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/create-quiz.html'));
-});
-
-// Rota para jogar quiz (com parâmetro id)
-app.get('/play-quiz', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/play-quiz.html'));
-});
-
-
-// IMPORTANTE: Servir arquivos estáticos do frontend
-app.use(express.static(path.join(__dirname, '../frontend')));
-
-// Rota para servir o dashboard
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
-});
-
-// Rota para servir o create-quiz
-app.get('/create-quiz', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/create-quiz.html'));
-});
-
-// Rota para servir o play-quiz
-app.get('/play-quiz', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/play-quiz.html'));
-});
-
-// Rota para servir o login
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/login.html'));
-});
-
-// Rota para servir o register
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/register.html'));
 });
 
-// Rota raiz redireciona para dashboard ou login
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
 });
 
-// Arquivos JSON para "banco de dados"
+app.get('/create-quiz', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/create-quiz.html'));
+});
+
+app.get('/play-quiz', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/play-quiz.html'));
+});
+
+// ========== BANCO DE DADOS JSON ==========
 const USERS_FILE = path.join(__dirname, 'users.json');
 const QUIZZES_FILE = path.join(__dirname, 'quizzes.json');
 
@@ -92,16 +77,14 @@ app.post('/auth/register', (req, res) => {
     
     const users = JSON.parse(fs.readFileSync(USERS_FILE));
     
-    // Verificar se usuário já existe
     if (users.find(u => u.username === username)) {
         return res.status(400).json({ message: 'Usuário já existe' });
     }
     
-    // Criar novo usuário
     const newUser = {
         id: Date.now().toString(),
         username,
-        password, // Em produção, hash a senha!
+        password,
         createdAt: new Date().toISOString()
     };
     
@@ -124,7 +107,6 @@ app.post('/auth/login', (req, res) => {
         return res.status(401).json({ message: 'Usuário ou senha inválidos' });
     }
     
-    // Gerar token simples
     const token = Buffer.from(JSON.stringify({ 
         id: user.id, 
         username: user.username 
@@ -141,9 +123,7 @@ app.post('/auth/login', (req, res) => {
     });
 });
 
-// ========== ROTAS DE QUIZZES ==========
-
-// Middleware de autenticação simples
+// ========== MIDDLEWARE DE AUTENTICAÇÃO ==========
 function authenticate(req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
@@ -160,14 +140,13 @@ function authenticate(req, res, next) {
     }
 }
 
-// GET /api/quizzes - Listar quizzes do usuário
+// ========== ROTAS DA API ==========
 app.get('/api/quizzes', authenticate, (req, res) => {
     const quizzes = JSON.parse(fs.readFileSync(QUIZZES_FILE));
     const userQuizzes = quizzes.filter(q => q.userId === req.userId);
     res.json({ quizzes: userQuizzes });
 });
 
-// GET /api/quizzes/:id - Buscar quiz específico
 app.get('/api/quizzes/:id', authenticate, (req, res) => {
     const quizzes = JSON.parse(fs.readFileSync(QUIZZES_FILE));
     const quiz = quizzes.find(q => q.id === req.params.id && q.userId === req.userId);
@@ -179,7 +158,6 @@ app.get('/api/quizzes/:id', authenticate, (req, res) => {
     res.json({ quiz });
 });
 
-// POST /api/quizzes - Criar novo quiz
 app.post('/api/quizzes', authenticate, (req, res) => {
     const { title, description, category, questions } = req.body;
     
@@ -214,7 +192,6 @@ app.post('/api/quizzes', authenticate, (req, res) => {
     });
 });
 
-// PUT /api/quizzes/:id - Atualizar quiz
 app.put('/api/quizzes/:id', authenticate, (req, res) => {
     const { title, description, category, questions } = req.body;
     const quizzes = JSON.parse(fs.readFileSync(QUIZZES_FILE));
@@ -247,7 +224,6 @@ app.put('/api/quizzes/:id', authenticate, (req, res) => {
     });
 });
 
-// DELETE /api/quizzes/:id - Deletar quiz
 app.delete('/api/quizzes/:id', authenticate, (req, res) => {
     const quizzes = JSON.parse(fs.readFileSync(QUIZZES_FILE));
     const filteredQuizzes = quizzes.filter(q => !(q.id === req.params.id && q.userId === req.userId));
@@ -261,7 +237,6 @@ app.delete('/api/quizzes/:id', authenticate, (req, res) => {
     res.json({ message: 'Quiz deletado com sucesso' });
 });
 
-// POST /api/quizzes/:id/play - Registrar uma jogada
 app.post('/api/quizzes/:id/play', authenticate, (req, res) => {
     const quizzes = JSON.parse(fs.readFileSync(QUIZZES_FILE));
     const quiz = quizzes.find(q => q.id === req.params.id);
@@ -276,21 +251,11 @@ app.post('/api/quizzes/:id/play', authenticate, (req, res) => {
     res.json({ message: 'Jogada registrada' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-    console.log(`Acesse: http://localhost:${PORT}`);
-    console.log(`Frontend disponível em:`);
-    console.log(`  - http://localhost:${PORT}/login`);
-    console.log(`  - http://localhost:${PORT}/dashboard`);
-    console.log(`  - http://localhost:${PORT}/create-quiz`);
-    console.log(`  - http://localhost:${PORT}/play-quiz?id=ID_DO_QUIZ`);
+// ========== INICIALIZAÇÃO DO SERVIDOR ==========
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ Servidor rodando na porta ${PORT}`);
+    console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔗 Acesse: http://localhost:${PORT}`);
 });
-
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-  });
-}
 
 module.exports = app;
