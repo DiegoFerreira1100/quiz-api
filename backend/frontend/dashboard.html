@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - QuizCreator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>QuizCreator</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" onclick="openCreateModal()">
+                <i class="fas fa-plus-circle"></i>
+                <span>Criar Quiz</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info" id="userInfo">
+                <div class="user-avatar" id="userAvatar">
+                    <span id="avatarInitial"></span>
+                </div>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Carregando...</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sair</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1 id="welcomeMessage">Olá, <span id="welcomeName">Usuário</span>! 👋</h1>
+            <p>Gerencie seus quizzes ou crie um novo desafio</p>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button class="btn-primary" onclick="openCreateModal()">
+                <i class="fas fa-plus"></i>
+                Criar Novo Quiz
+            </button>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar quizzes..." id="searchInput" onkeyup="searchQuizzes()">
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+    <button class="filter-btn active" onclick="filterQuizzes('all')">Todos</button>
+    <button class="filter-btn" onclick="filterQuizzes('active')">Ativos</button>
+    <button class="filter-btn" onclick="filterQuizzes('draft')">Rascunhos</button>
+</div>
+
+        <!-- Quizzes Section -->
+        <div class="quizzes-header">
+            <h2>Meus Quizzes</h2>
+            <span id="quizzesCount">0 quizzes</span>
+        </div>
+
+        <div class="quizzes-grid" id="quizzesGrid">
+            <!-- Quizzes serão carregados aqui via JavaScript -->
+        </div>
+
+        <!-- Empty State (mostrar quando não houver quizzes) -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>Nenhum quiz encontrado</h3>
+            <p>Comece criando seu primeiro quiz!</p>
+            <button class="btn-primary" onclick="openCreateModal()">
+                <i class="fas fa-plus"></i>
+                Criar Quiz
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal para criar/editar quiz -->
+    <div class="modal" id="quizModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Criar Novo Quiz</h2>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="quizForm" class="modal-form" onsubmit="saveQuiz(event)">
+                <input type="hidden" id="quizId">
+                
+                <div class="form-group">
+                    <label for="quizTitle">Título do Quiz</label>
+                    <input type="text" id="quizTitle" placeholder="Ex: Fundamentos de JavaScript" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="quizDescription">Descrição</label>
+                    <textarea id="quizDescription" rows="3" placeholder="Descreva o conteúdo do quiz..." required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quizCategory">Categoria</label>
+                        <select id="quizCategory" required>
+                            <option value="">Selecione</option>
+                            <option value="Tecnologia">Tecnologia</option>
+                            <option value="Conhecimentos Gerais">Conhecimentos Gerais</option>
+                            <option value="Entretenimento">Entretenimento</option>
+                            <option value="Ciência">Ciência</option>
+                            <option value="História">História</option>
+                            <option value="Geografia">Geografia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quizQuestions">Número de Perguntas</label>
+                        <input type="number" id="quizQuestions" min="1" max="50" value="5" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quizStatus">Status</label>
+                    <select id="quizStatus">
+                        <option value="active">Ativo</option>
+                        <option value="draft">Rascunho</option>
+                    </select>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn-save">Salvar Quiz</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert" id="alert">
+        <i class="fas" id="alertIcon"></i>
+        <span id="alertMessage"></span>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

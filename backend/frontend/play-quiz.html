@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogar Quiz - QuizCreator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/play-quiz.css">
+</head>
+<body>
+    <div class="play-container">
+        <!-- Header do Quiz -->
+        <div class="quiz-header">
+            <h1 id="quizTitle">Carregando...</h1>
+            <div class="quiz-meta">
+                <span><i class="fas fa-layer-group"></i> <span id="quizCategory"></span></span>
+                <span><i class="fas fa-question-circle"></i> <span id="questionCount">0</span> perguntas</span>
+            </div>
+        </div>
+
+        <!-- Progresso -->
+        <div class="quiz-progress">
+            <div class="progress-text">
+                <span>Pergunta <span id="currentQuestion">1</span> de <span id="totalQuestions">0</span></span>
+                <span id="score">0</span> pontos
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Questão Atual -->
+        <div class="question-container" id="questionContainer">
+            <div class="question-number" id="questionNumber">Pergunta 1</div>
+            <div class="question-text" id="questionText"></div>
+            
+            <div class="alternatives" id="alternatives"></div>
+        </div>
+
+        <!-- Botões de Navegação -->
+        <div class="quiz-navigation">
+            <button class="btn-nav" id="prevBtn" onclick="previousQuestion()" disabled>
+                <i class="fas fa-arrow-left"></i> Anterior
+            </button>
+            <button class="btn-nav btn-next" id="nextBtn" onclick="nextQuestion()">
+                Próxima <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- Botão de Finalizar -->
+        <div class="finish-section" id="finishSection" style="display: none;">
+            <button class="btn-finish" onclick="finishQuiz()">
+                <i class="fas fa-check-circle"></i> Finalizar Quiz
+            </button>
+        </div>
+
+        <!-- Resultado -->
+        <div class="result-container" id="resultContainer" style="display: none;">
+            <div class="result-score">
+                <h2>Quiz Finalizado!</h2>
+                <div class="score-circle">
+                    <span id="finalScore">0</span>
+                    <span>/<span id="totalPossible">0</span></span>
+                </div>
+                <p>Você acertou <span id="correctAnswers">0</span> de <span id="totalAnswers">0</span> perguntas</p>
+            </div>
+            
+            <div class="result-actions">
+                <button class="btn-back-home" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-home"></i> Voltar ao Dashboard
+                </button>
+                <button class="btn-play-again" onclick="restartQuiz()">
+                    <i class="fas fa-redo"></i> Jogar Novamente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/play-quiz.js"></script>
+</body>
+</html>
